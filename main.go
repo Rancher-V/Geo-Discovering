@@ -7,8 +7,9 @@ import (
         "log"
         "strconv"
         "reflect"
-        elastic "gopkg.in/olivere/elastic.v3"
+        "gopkg.in/olivere/elastic.v3"
         "github.com/pborman/uuid"
+        "strings"
 )
 
 const (
@@ -19,7 +20,7 @@ const (
         //PROJECT_ID = "around-xxx"
         //BT_INSTANCE = "around-post"
         // Needs to update this URL if you deploy it to cloud.
-        ES_URL = "http://35.196.96.213:9200"
+        ES_URL = "http://35.185.108.84:9200"
 )
 
 
@@ -60,8 +61,7 @@ func main() {
                                   }
                            }
                     }
-             }
-             `
+                }`
                 _, err := client.CreateIndex(INDEX).Body(mapping).Do()
                 if err != nil {
                         // Handle error
@@ -129,8 +129,9 @@ func handlerSearch(w http.ResponseWriter, r *http.Request) {
                 p := item.(Post) // p = (Post) item
                 fmt.Printf("Post by %s: %s at lat %v and lon %v\n", p.User, p.Message, p.Location.Lat, p.Location.Lon)
                 // TODO(student homework): Perform filtering based on keywords such as web spam etc.
-                ps = append(ps, p)
-
+                if !strings.Contains(p.Message, "fuck") {
+                        ps = append(ps, p)
+                }
         }
         js, err := json.Marshal(ps)
         if err != nil {
@@ -157,10 +158,10 @@ func handlerPost(w http.ResponseWriter, r *http.Request) {
                 panic(err)
                 return
         }
+        //fmt.Fprint(w, "%s", p.Message)
         id := uuid.New()
         // Save to ES.
         saveToES(&p, id)
-
 }
 
 
