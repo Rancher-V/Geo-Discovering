@@ -19,7 +19,7 @@ const (
         TYPE = "post"
         DISTANCE = "200km"
         // Needs to update
-        PROJECT_ID = "around-xxx"
+        PROJECT_ID = "instant-gecko-185822"
         BT_INSTANCE = "around-post"
         // Needs to update this URL if you deploy it to cloud.
         ES_URL = "http://104.196.181.29:9200"
